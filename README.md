@@ -36,7 +36,7 @@ All the updates and current work-in-progress for my B.Tech Project, along with N
      #Download all the required data of NLTK
      nltk.download('all')
 ```
-   - Clone this repository and run neural_net.py
+   - Clone this repository and run
 ```  
      python3 neural_net.py
 ```
