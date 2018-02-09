@@ -1,5 +1,5 @@
 # B.Tech-Project
-All the updates and current work-in-progress for my B.Tech Project, along with Namish Narayan under the guidance of Kshitiz Verma Sir.
+All the updates and current work-in-progress for my B.Tech Project, along with [Namish Narayan](https://github.com/Namish123) under the guidance of Kshitiz Verma Sir.
 
 ## Current Work:
   * Sentiment Data Analysis
