@@ -17,8 +17,24 @@ All the updates and current work-in-progress for my B.Tech Project, along with N
     - This data is then stored as pickle, and can be accessed externally.
     
   * Data Feed into Neural Network
-  
 <p align="center">
 <img src="https://i.imgur.com/wMjbY4X.png">
 </p>
     - This calculates the total accuracy of the model.
+    
+ ## How To Build:
+ 
+     function fancyAlert(arg) {
+      if(arg) {
+        $.facebox({div:'#foo'})
+      }
+    }
+    
+    ```javascript
+function fancyAlert(arg) {
+  if(arg) {
+    $.facebox({div:'#foo'})
+  }
+}
+```
+    
