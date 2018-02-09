@@ -25,17 +25,20 @@ All the updates and current work-in-progress for my B.Tech Project, along with N
  ## How To Build:
    - Install pip3 (for Python 3)
    - Install Essential libraries like [TensorFlow](https://www.tensorflow.org/), [NumPy](http://www.numpy.org/), [SciPy](https://www.scipy.org/)
-```  pip3 install tensorflow
+```
+     pip3 install tensorflow
 ```
    - Install NLTK Library for Python
- ``` pip3 install nltk
-     //Open Python in Commandline
+ ``` 
+     pip3 install nltk
+     #Open Python in Commandline
      python3
-     //Download all the required data of NLTK
+     #Download all the required data of NLTK
      nltk.download('all')
 ```
    - Clone this repository and run neural_net.py
-```  python3 neural_net.py
+```  
+     python3 neural_net.py
 ```
 
 Please leave all our suggestions and updates in issues. Thank You.
