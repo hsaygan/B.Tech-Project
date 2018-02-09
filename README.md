@@ -21,4 +21,4 @@ All the updates and current work-in-progress for my B.Tech Project, along with N
 <p align="center">
 <img src="https://i.imgur.com/wMjbY4X.png">
 </p>
- 
+    - This calculates the total accuracy of the model.
