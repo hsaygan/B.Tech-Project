@@ -1,5 +1,5 @@
 # B.Tech-Project
-All the updates and current work-in-progress for my B.Tech Project, along with Namish Narayan.
+All the updates and current work-in-progress for my B.Tech Project, along with Namish Narayan under the guidance of Kshitiz Verma Sir.
 
 ## Current Work:
   * Sentiment Data Analysis
@@ -23,18 +23,19 @@ All the updates and current work-in-progress for my B.Tech Project, along with N
     - This calculates the total accuracy of the model.
     
  ## How To Build:
- 
-     function fancyAlert(arg) {
-      if(arg) {
-        $.facebox({div:'#foo'})
-      }
-    }
-    
-    ```javascript
-function fancyAlert(arg) {
-  if(arg) {
-    $.facebox({div:'#foo'})
-  }
-}
+   - Install pip3 (for Python 3)
+   - Install Essential libraries like [TensorFlow](https://www.tensorflow.org/), [NumPy](http://www.numpy.org/), [SciPy](https://www.scipy.org/)
+```  pip3 install tensorflow
 ```
-    
+   - Install NLTK Library for Python
+ ``` pip3 install nltk
+     //Open Python in Commandline
+     python3
+     //Download all the required data of NLTK
+     nltk.download('all')
+```
+   - Clone this repository and run neural_net.py
+```  python3 neural_net.py
+```
+
+Please leave all our suggestions and updates in issues. Thank You.
