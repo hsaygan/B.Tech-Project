@@ -6,6 +6,7 @@ All the updates and current work-in-progress for my B.Tech Project, along with [
     - Creating Featuresets from Abstract Data
     - Feeding vectorized data into Neural Network
     - Modifying parameters to improve accuracy
+    - Inputting large amount of data in the network
 
 ## Sentiment Data Analysis Overview:
   * Creating Organized and Vectorized Data
