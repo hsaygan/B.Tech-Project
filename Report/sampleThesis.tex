@@ -1,0 +1,109 @@
+%  $Description: Thesis
+%  $Author: xxx $
+%  $Date: xxx  $
+%  $Revision: 0.0 $
+
+\documentclass[11pt]{book}
+\usepackage{LNMIIT_BTP}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{algorithm2e}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{blindtext}
+\graphicspath{{Figures/}{./}} % To include images in other directories
+%\usepackage{setspace}
+
+\long\def\symbolfootnote[#1]#2{\begingroup%
+\def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{#2}\endgroup}
+\renewcommand{\baselinestretch}{1.2}
+\onecolumn
+%--------------------------------------------------------
+
+\begin{document}
+\pagenumbering{roman}
+
+%%Cover Page
+ 
+
+%% TITLE PAGE
+ \input{titlePage.tex}
+
+
+%% COPYRIGHT PAGE
+\newpage
+ \thispagestyle{empty}
+\renewcommand{\thesisdedication}{{\large Copyright \copyright~~ The LNMIIT 2017\\}{\large All Rights Reserved\\}}
+\thesisdedicationpage
+
+%% CERTIFICATE PAGE
+\input{certificate.tex}
+
+%%% DEDICATION PAGE
+\newpage
+\thispagestyle{empty}
+\renewcommand{\thesisdedication}{\large Dedicated to My Family and Friends (add whosoever's name you want) }
+\thesisdedicationpage
+
+%\mastersthesis
+%\renewcommand{\baselinestretch}{1.5}
+
+% ACKNOWLEDGEMENTS PAGE
+\chapter*{Acknowledgments}
+\label{ch:ack}
+\input{acknowledgements.tex}
+
+% Abstract
+\chapter*{Abstract}
+\label{ch:ack}
+\input{abstract.tex}
+
+
+%--------------------------------------------------------
+\tableofcontents
+%\listoffigures
+%\listoftables
+
+%----------------------------------------------------
+\chapter{Introduction}
+\label{ch:intro}
+\input{Chapter1.tex}
+
+\chapter{Litrature Survey}
+\label{ch:reversible}
+\input{Chapter2.tex}
+
+\chapter{Proposed Work}
+\label{ch:new}
+\input{Chapter3.tex}
+
+\chapter{Simulation and Results}
+\label{ch:result}
+\input{Chapter4.tex}
+
+\chapter{Conclusions and Future Work}
+\label{ch:conclude}
+\input{conclusion.tex}
+
+
+%--------------------------------------------------------
+
+%--------------------------------------------------------
+%%% Optional appendix
+%\appendix
+%\chapter{}
+%\label{}
+
+%--------------------------------------------------------
+% Recommended 'Related Publication'
+%--------------------------------------------------------
+
+\bibliographystyle{latex8}
+\bibliography{sampleBib} 
+
+\end{document}
