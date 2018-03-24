@@ -7,6 +7,7 @@ All the updates and current work-in-progress for my B.Tech Project, along with [
     - Feeding vectorized data into Neural Network
     - Modifying parameters to improve accuracy
     - Inputting large amount of data in the network
+    - For dynamic neural network model, pivoting to [PyTorch](http://pytorch.org/)
 
 ## Sentiment Data Analysis Overview:
   * Creating Organized and Vectorized Data

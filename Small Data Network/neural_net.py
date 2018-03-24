@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 from create_sentiment_featuresets import create_feature_sets_and_labels
 
-train_x, train_y, test_x, test_y = create_feature_sets_and_labels('Data/pos.txt', 'Data/neg.txt')
+train_x, train_y, test_x, test_y = create_feature_sets_and_labels('../Data/pos.txt', '../Data/neg.txt')
 
 n_nodes_hl1 = 500
 n_nodes_hl2 = 300
