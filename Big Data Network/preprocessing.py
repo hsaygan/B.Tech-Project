@@ -60,7 +60,6 @@ def create_lexicon(fin):
 		pickle.dump(lexicon,f)
 
 
-
 def convert_to_vec(fin,fout,lexicon_pickle):
 	with open(lexicon_pickle,'rb') as f:
 		lexicon = pickle.load(f)
@@ -95,6 +94,7 @@ def shuffle_data(fin):
 	print(df.head())
 	df.to_csv('train_set_shuffled.csv', index=False)
 
+
 def create_test_data_pickle(fin):
 	feature_sets = []
 	labels = []
@@ -114,9 +114,10 @@ def create_test_data_pickle(fin):
 	feature_sets = np.array(feature_sets)
 	labels = np.array(labels)
 
-init_process('Data/More/training.1600000.processed.noemoticon.csv','train_set.csv')
-init_process('Data/More/testdata.manual.2009.06.14.csv','test_set.csv')
-create_lexicon('train_set.csv')
+
+#init_process('../Data/More/training.1600000.processed.noemoticon.csv','train_set.csv')
+init_process('../Data/More/testdata.manual.2009.06.14.csv','test_set.csv')
+#create_lexicon('train_set.csv')
 convert_to_vec('test_set.csv','processed-test-set.csv','lexicon-2500-2638.pickle')
-shuffle_data('train_set.csv')
+#shuffle_data('train_set.csv')
 create_test_data_pickle('processed-test-set.csv')
