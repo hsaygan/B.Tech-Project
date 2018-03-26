@@ -4,12 +4,10 @@ import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-import csv
 lemmatizer = WordNetLemmatizer()
 
-input_nodes = 6445
 n_nodes_hl1 = 500
-n_nodes_hl2 = 200
+n_nodes_hl2 = 500
 
 n_classes = 2
 
@@ -21,7 +19,7 @@ x = tf.placeholder('float')
 y = tf.placeholder('float')
 
 hidden_1_layer = {'f_fum':n_nodes_hl1,
-                  'weight':tf.Variable(tf.random_normal([input_nodes, n_nodes_hl1])),
+                  'weight':tf.Variable(tf.random_normal([2638, n_nodes_hl1])),
                   'bias':tf.Variable(tf.random_normal([n_nodes_hl1]))}
 
 hidden_2_layer = {'f_fum':n_nodes_hl2,
@@ -45,11 +43,11 @@ tf_log = 'tf.log'
 
 def train_neural_network(x):
     prediction = neural_network_model(x)
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=prediction, labels=y))
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y))
     optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(cost)
 
     with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
+        sess.run(tf.initialize_all_variables())
         try:
             epoch = int(open(tf_log,'r').read().split('\n')[-2])+1
             print('STARTING:',epoch)
@@ -60,17 +58,15 @@ def train_neural_network(x):
             if epoch != 1:
                 saver.restore(sess,"model.ckpt")
             epoch_loss = 1
-            with open('Temp/lexicon-0-2501.pickle','rb') as f:
+            with open('lexicon-2500-2638.pickle','rb') as f:
                 lexicon = pickle.load(f)
-            with open('Temp/train_shuffled.csv', buffering=20000, encoding='latin-1') as f:
-                reader = list(csv.reader(f))
+            with open('train_set_shuffled.csv', buffering=20000, encoding='latin-1') as f:
                 batch_x = []
                 batch_y = []
                 batches_run = 0
-                for line in reader:
-                    line = list(line)
-                    label = line[0]
-                    tweet = line[1]
+                for line in f:
+                    label = line.split(':::')[0]
+                    tweet = line.split(':::')[1]
                     current_words = word_tokenize(tweet.lower())
                     current_words = [lemmatizer.lemmatize(i) for i in current_words]
 
@@ -79,6 +75,7 @@ def train_neural_network(x):
                     for word in current_words:
                         if word.lower() in lexicon:
                             index_value = lexicon.index(word.lower())
+                            # OR DO +=1, test both
                             features[index_value] += 1
                     line_x = list(features)
                     line_y = eval(label)
@@ -116,7 +113,7 @@ def test_neural_network():
         feature_sets = []
         labels = []
         counter = 0
-        with open('Temp/test_vector.csv', buffering=20000) as f:
+        with open('processed-test-set.csv', buffering=20000) as f:
             for line in f:
                 try:
                     features = list(eval(line.split('::')[0]))

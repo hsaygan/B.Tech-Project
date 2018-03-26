@@ -1,3 +1,5 @@
+import csv
+import re
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
@@ -8,93 +10,111 @@ import pandas as pd
 lemmatizer = WordNetLemmatizer()
 
 '''
-polarity 0 = negative. 2 = neutral. 4 = positive.
-id
-date
-query
-user
-tweet
+0: -ve
+2: neutral
+4: +ve
+
+[1,0]: -ve
+[0,1]: +ve
 '''
 
-def init_process(fin,fout):
-	outfile = open(fout,'a')
-	with open(fin, buffering=200000, encoding='latin-1') as f:
-		try:
-			for line in f:
-				line = line.replace('"','')
-				initial_polarity = line.split(',')[0]
-				if initial_polarity == '0':
-					initial_polarity = [1,0]
-				elif initial_polarity == '4':
-					initial_polarity = [0,1]
+#Converts CSV file to format we desire
+def initialize(source_file, starting_line, ending_line, output_file):
+    with open(output_file, 'a') as output_obj:
+        output_writer = csv.writer(output_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
-				tweet = line.split(',')[-1]
-				outline = str(initial_polarity)+':::'+tweet
-				outfile.write(outline)
-		except Exception as e:
-			print(str(e))
-	print ("\nFile: '", fin, "' is coverted to '", fout, "'")
-	outfile.close()
+        with open(source_file, 'r', encoding='latin-1') as input_obj:
+            reader_entire_file = list(csv.reader(input_obj))
+            for line in reader_entire_file[starting_line:ending_line]:
+                polarity = [0,0]
+                line = list(line)
 
+                if (int(line[0]) == 0):
+                    polarity[0] = 1
+                elif (int(line[0]) == 4):
+                    polarity[1] = 1
+                else:
+                    continue
 
-def create_lexicon(fin):
-	lexicon = []
-	with open(fin, 'r', buffering=100000, encoding='latin-1') as f:
-		try:
-			counter = 1
-			content = ''
-			for line in f:
-				counter += 1
-				if (counter/2500.0).is_integer():
-					tweet = line.split(':::')[1]
-					content += ' '+tweet
-					words = word_tokenize(content)
-					words = [lemmatizer.lemmatize(i) for i in words]
-					lexicon = list(set(lexicon + words))
-					print(counter, len(lexicon))
+                tweet = re.sub(r'(\s)@\w+', r'\1',  " "+line[-1])
+                line = [polarity, tweet]
 
-		except Exception as e:
-			print(str(e))
-
-	with open('lexicon-2500-2638.pickle','wb') as f:
-		pickle.dump(lexicon,f)
+                output_writer.writerow(line)
+                #print(line)
 
 
-def convert_to_vec(fin,fout,lexicon_pickle):
-	with open(lexicon_pickle,'rb') as f:
-		lexicon = pickle.load(f)
-	outfile = open(fout,'a')
-	with open(fin, buffering=20000, encoding='latin-1') as f:
-		counter = 0
-		for line in f:
-			counter +=1
-			label = line.split(':::')[0]
-			tweet = line.split(':::')[1]
-			current_words = word_tokenize(tweet.lower())
-			current_words = [lemmatizer.lemmatize(i) for i in current_words]
+#Creates a dictionary of words appearing in [line_start, line_end] lines
+def create_lexicon(source_file, starting_line, ending_line, output_file):
+    with open(output_file, 'wb') as output_obj:
+        lexicon = []
 
-			features = np.zeros(len(lexicon))
+        with open(source_file, 'r') as input_obj:
+            reader_entire_file = list(csv.reader(input_obj))
+            counter = 1
+            content = ''
 
-			for word in current_words:
-				if word.lower() in lexicon:
-					index_value = lexicon.index(word.lower())
-					# OR DO +=1, test both
-					features[index_value] += 1
+            for line in reader_entire_file[starting_line:ending_line]:
+                print ("\nLine ", counter, ":")
+                counter += 1
+                #if (counter/2500.0).is_integer():
+                line = list(line)
+                tweet = line[1]
+                content += ' ' + tweet
 
-			features = list(features)
-			outline = str(features)+'::'+str(label)+'\n'
-			outfile.write(outline)
+                words = word_tokenize(content)
+                words = [lemmatizer.lemmatize(i) for i in words]
+                #print("\n\tNeglecting: ",end=''),
+                words = [word if (len(word) > 1) else print(end='')  for word in words] #To display removed words: add print("word ",end='')
+                lexicon = list(set(lexicon + words))
+                print ("\n\tLength of Lexicon: ",len(lexicon))
 
-		print(counter)
-
-
-def shuffle_data(fin):
-	df = pd.read_csv(fin, error_bad_lines=False)
-	df = df.iloc[np.random.permutation(len(df))]
-	print(df.head())
-	df.to_csv('train_set_shuffled.csv', index=False)
+            #print(lexicon)
+            pickle.dump(lexicon, output_obj)
 
 
+#Vectorizes. Creates array of Zeros and increments the array if respective word appears for per Line of the source
+def create_featuresets(source_file, lexicon_pickle, output_file):
+    print ("\nLoading Pickle: " + lexicon_pickle)
+    with open(lexicon_pickle,'rb') as f:
+        lexicon = pickle.load(f)
+
+        with open(output_file,'a') as output_obj:
+
+            with open(source_file, buffering=20000, encoding='latin-1') as input_obj:
+                reader_entire_file = list(csv.reader(input_obj))
+                counter = 1
+
+                for line in reader_entire_file:
+                    print ("\nLine ", counter, ":")
+                    counter += 1
+                    line = list(line)
+                    label = line[0]
+                    tweet = line[1]
+
+                    current_words = word_tokenize(tweet.lower())
+                    current_words = [lemmatizer.lemmatize(i) for i in current_words]
+                    features = np.zeros(len(lexicon), dtype=int)
+
+                    for word in current_words:
+                        if word.lower() in lexicon:
+                            index_value = lexicon.index(word.lower())
+                            features[index_value] += 1
+                    features = list(features)
+                    line = str(features)+':::'+str(label)+'\n'
+
+                    output_obj.write(line)
+                    #print("\n\t", line)
+
+
+#Shuffles lines for better Neural Network Learning
+def shuffle(source_file, output_file):
+    data = pd.read_csv(source_file, error_bad_lines=False)
+    data = data.iloc[np.random.permutation(len(data))]
+    print(data.head())
+    data.to_csv(output_file, index=False)
+
+
+#NOT DONE YET!
 def create_test_data_pickle(fin):
 	feature_sets = []
 	labels = []
@@ -115,9 +135,23 @@ def create_test_data_pickle(fin):
 	labels = np.array(labels)
 
 
-#init_process('../Data/More/training.1600000.processed.noemoticon.csv','train_set.csv')
-init_process('../Data/More/testdata.manual.2009.06.14.csv','test_set.csv')
-#create_lexicon('train_set.csv')
-convert_to_vec('test_set.csv','processed-test-set.csv','lexicon-2500-2638.pickle')
-#shuffle_data('train_set.csv')
-create_test_data_pickle('processed-test-set.csv')
+if __name__ == "__main__":
+    Training_Data_Source = "../../Data/More/training.1600000.processed.noemoticon.csv"     #"Data/train_source.csv"
+    Testing_Data_Source = "../../Data/More/testdata.manual.2009.06.14.csv"                 #"Data/test_source.csv"
+
+    line_start = 0
+    line_end = 2501
+
+    #For Training Data
+    initialize(Training_Data_Source, line_start, line_end, "Temp/train_initalized.csv")
+    lexicon_count = create_lexicon("Temp/train_initalized.csv", line_start, line_end, "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle")
+    shuffle("Temp/train_initalized.csv", "Temp/train_shuffled.csv")
+
+    print ("\n\n\t Preprocessing for Training Data Completed!\n\n")
+
+    #For Testing Data
+    initialize(Testing_Data_Source, 0, -1, "Temp/test_initialized.csv")
+    create_featuresets("Temp/test_initialized.csv", "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle", "Temp/test_vector.csv")
+    #create_test_data_pickle("Data/test_vector.csv")
+
+    print ("\n\n\t Preprocessing for Training Data Completed!\n\n")

@@ -1,45 +1,173 @@
+
 \section{Introduction}
-Chapter 2 goes here ...
+After going through a bunch of different platforms to work on, we concluded that TensorFlow, using Python, was the most efficient and time-effective way to implement our ideas. This is due to their excellent documentation, numerous examples and a giant welcoming community of enthusiastic developers.
 
-Sample image insertion. 
 
-\begin{figure}[h]
+\section{Neural Network using Small Dataset}
+To start off our attempt at implementation, we used a small openly available positive and negative sentiment dataset with 5331 lines of labelled data, for each positive and negative sentiment. We used a basic, Feed-forward Back-propagating Neural Network and focused on it being expandable, flexible and easy to understand and implement. Full Code Link \href{https://github.com/hsaygan/B.Tech-Project}{here.}
+
+\begin{table}[htb]
 \centering
-\includegraphics[width = 2in]{LNMIIT.png}
-\caption{LNMIIT Logo }
-\label{figure:1}
-\end{figure}
-
-
-Sample table
-\begin{table}[t]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-Transitions($\triangle_{k-1}, \triangle_k, \triangle_{k+1})$ & Delay of Line $'k'$ & Crosstalk class $C_c$\\
+\begin{tabular}{|c|}
 \hline
 
-$\uparrow-\uparrow , \downarrow-\downarrow, \uparrow-\downarrow, \downarrow-\uparrow, \uparrow- -$ & & \\
-
-,$ \downarrow - -, - - -, - - \uparrow, - - \downarrow$  & 0 & 1\\
+"too much power , not enough puff"\\
 \hline
 
-$\uparrow\uparrow\uparrow, \downarrow\downarrow\downarrow $& 1 & 2\\
+"narc is all menace and atmosphere"\\
 \hline
 
-$\uparrow\uparrow -, \downarrow\downarrow-, -\uparrow\uparrow, -\downarrow\downarrow$ & 1+$\lambda$ &3\\
+"an almost unbearably morbid love story"\\
 \hline
 
-$-\uparrow-, -\downarrow-, \uparrow\downarrow\downarrow, \uparrow\uparrow\downarrow, \downarrow\downarrow\uparrow, \downarrow\uparrow\uparrow$ & 1 +$2\lambda$ & 4\\
+"feels strangely hollow at its emotional core"\\
 \hline
 
-$-\uparrow\downarrow, -\downarrow\uparrow, \downarrow\uparrow-, \uparrow\downarrow-$ & 1 +$3\lambda$ & 5\\
+"enigma is well-made , but it's just too dry and too placid"\\
 \hline
 
-$\uparrow\downarrow\uparrow, \downarrow\uparrow\downarrow $ & 1 +$4\lambda$ & 6\\
+"it's tough to be startled when you're almost dozing"\\
 \hline
 
 \end{tabular}
-\caption{Delay and Crosstalk Classes for various 3-bit combinations (transitions)}
+\caption{Extracts (per line) for Negative Sentiment Dataset}
 \label{tab:}
 \end{table}
+
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|}
+\hline
+
+"another best of the year selection"\\
+\hline
+
+"an entertaining , if ultimately minor , thriller"\\
+\hline
+
+"an almost unbearably morbid love story"\\
+\hline
+
+"a lovably old-school hollywood confection"\\
+\hline
+
+"simultaneously heartbreakingly beautiful and exquisitely sad"\\
+\hline
+
+"a solidly entertaining little film"\\
+\hline
+
+\end{tabular}
+\caption{Extracts (per line) for Positive Sentiment Dataset}
+\label{tab:}
+\end{table}
+
+
+\subsection{About the Data}
+The entire data consists of 2 files, namely Positive.txt and Negative.txt, both of which can be extracted from \href{https://pythonprogramming.net/static/downloads/machine-learning-data/pos.txt}{Positive.txt} and \href{https://pythonprogramming.net/static/downloads/machine-learning-data/neg.txt}{Negative.txt} links.
+
+\subsection{Data Preprocessing}
+The data, as one can see, is in natural language and is completely unstructured. Therefore, to apply any implementation, first we need to process it in an organized format to make it structured.
+To restructure this data, we used various Library like NLTK, NumPy, Pandas, Pickle etc. The preprocessing follows the given structure
+\begin{itemize}
+  \item Creating Lexicon
+  \item Creating Vectors
+  \item Adding Labels
+  \item Creating Featuresets
+  \item Exporting Final Data
+\end{itemize}
+
+\subsubsection{Creating Lexicon}
+First we created Lexicon, which is basically a dictionary for all the words that appear in all the lines in a file. Tokenizer extracts words from each line of the file, removing unnecessary words like "the", "and" etc. which do not contribute to sentiments or quality of the line. We also used Lemmatizer to eliminate words which infer the same (ex. "cat" and "cats" can be treated as one). Creating Lexicon gives us the full discovery of all the words occurring in both the files
+
+\subsubsection{Creating Vectors}
+After creating the Lexicon, we form a NumPy array (of Zeros initially) for each and every line of both the files. This array represents the words that are present in that particular line with respect to the lexicon. This means, that the array is a vector, which has 1 (or $>$ 1) values due to words occurring in that line, at the same index as of the lexicon's.
+
+\begin{verbatim}
+Let the Lexicon be:
+    lex = {"Cat", "Ball", "Mouse", "Pizza"}
+Also, let a line be:
+    line = "Cat ate the mouse"
+Therefore, it's vector will be:
+    vec = [1, 0, 1, 0]
+
+Note: Actual Size of Lexicon = 423
+\end{verbatim}
+
+\subsubsection{Adding Labels}
+Vectors, after being created for each line for both the files, are then combined with their labelled sentiment. ie. "[1,0]" for Positive Sentiment, and "[0,1]" for Negative Sentiment.
+Therefore, the vector now transforms into a 2 dimentional aspect, one containing the vector of words in the line, and the other containing the label it carries.
+
+\begin{verbatim}
+Let a vector be:
+    vec = [1, 0, 1, 0]
+Now let's say that it was in the positive.txt file, therefore it will be labbeled as [1,0]
+    final_vec = [[1,0,1,0], [1,0]]
+\end{verbatim}
+
+\subsubsection{Creating Featuresets}
+All the final vectors formed are combined in one giant object, named 'featureset'. Note that this object contains all the lines in both the files in vector forms along with their labels.
+After creating this object, we randomize entry. This is to ensure in the future that when the Neural Network will be training on this data, It won't be trained to the extreme for one sentiment (More on this in later sections).
+After Randomizing, we split the object in 4 Objects, diving them to form training and testing data. The code is self explanatory.
+
+\begin{verbatim}
+    train_x = list(features[:,0][:-testing_size])
+    train_y = list(features[:,1][:-testing_size])
+    test_x = list(features[:,0][-testing_size:])
+    test_y = list(features[:,1][-testing_size:])
+\end{verbatim}
+
+\subsubsection{Exporting Final Data}
+After the division of the featureset into the 4 aforementioned objects, the objects are are encapsulated using the 'Pickle' Library, and are exported. Pickle data are converted from python objects to byte stream. It helps serialize all the data, and makes storage and access of python objects easier.
+
+\subsection{Building The Neural Network}
+We used Neural Networks due to it's expandability and flexibility regarding fitting data points and it's accuracy over larger datasets. The Neural Network Model we build consisted of 1 Input, 3 Hidden, 1 output layer. Number of nodes in Input layer is decided by the length of 'train-x' features from the pickle. Output Layer consists of a single node. Since it's a classification problem (whether a line exhibits positive or negative sentiment) the output node has 2 classes, one for each sentiment.
+
+\subsubsection{Neural Network Model}
+In this fully connected Neural Network, each node is connected to all the nodes in the layer before and after it's own layer. The diagram makes it easier to visualize. Each connection between 2 nodes has a weight and a bias value associated with it, which is initialized to random numbers. We also used Rectified Linear (or ReLu) as an activation function for each connection. 
+
+\subsubsection{Feed-forward and Back-propagation}
+After the Neural Network Model is built, we set it up to train it with our data. We used 'tf.nn.softmax-cross-entropy-with-logits' to reduce cost and 'AdamOptimizer' to Optimize  which are both pretty much standard in TensorFlow. We Then trained the Model in Batches of 100 lines per batch. Do Note that TensorFlow is a library which handles back propogation all by itself with the provided model in a given session. Thus, the labour intensive part was handled by the library itself.
+
+\begin{verbatim}
+#This is the session's code where Neural Network is Trained
+with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+        for epoch in range(hm_epochs):
+            epoch_loss = 0
+            i=0
+            while i < len(train_x):
+                start = i
+                end = i + batch_size
+                batch_x = np.array(train_x[start:end])
+                batch_y = np.array(train_y[start:end])
+                
+                #Sess.run handles backpropagation and reduces the cost of the Model
+                _, c = sess.run([optimizer, cost], feed_dict={x: batch_x, y: batch_y})
+                epoch_loss += c
+                i += batch_size
+            print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
+        correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
+        accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+
+#Epoch is the number of times the Model is being trained by the same data
+\end{verbatim}
+
+\subsection{Testing and Results}
+We experimented the Neural Network Model by modifying multiple parameters like the Number of Epochs, Number of Hidden Layers, Nodes in the Hidden Layers etc. All of the results can easily be visualized with the Tables below.
+
+\subsubsection{Varying Epochs}
+
+\includegraphics[scale=0.3]{epoch.png}
+
+\subsubsection{Varying Hidden Layer Nodes}
+
+\includegraphics[scale=0.3]{hlnodes.png}
+
+\subsubsection{Varying Number of Hidden Layers}
+
+\includegraphics[scale=0.3]{nhiddenlayers.png}
+
+\subsection{Conclusion}
+From the above results we can conclude that the effect of either of the parameters is not that significant, as it's in the margin of error in choose the random value of the weights and biases in the initialization process. Since Neural Network's heart lies in it's data, we strive to get more data to train our Neural Network. In the next chapter, we move from data  of just 5331 lines of unstructured Natural Language, to 1.6 Million lines of unstructured labelled Natural Language from Tweets.
