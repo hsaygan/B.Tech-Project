@@ -17,6 +17,7 @@ lemmatizer = WordNetLemmatizer()
 [1,0]: -ve
 [0,1]: +ve
 '''
+
 #Converts CSV file to format we desire
 def initialize(source_file, starting_line, ending_line, output_file):
     with open(output_file, 'a') as output_obj:
@@ -112,6 +113,26 @@ def shuffle(source_file, output_file):
     print(data.head())
     data.to_csv(output_file, index=False)
 
+#NOT DONE YET!
+def create_test_data_pickle(fin):
+	feature_sets = []
+	labels = []
+	counter = 0
+	with open(fin, buffering=20000) as f:
+		for line in f:
+			try:
+				features = list(eval(line.split('::')[0]))
+				label = list(eval(line.split('::')[1]))
+
+				feature_sets.append(features)
+				labels.append(label)
+				counter += 1
+			except:
+				pass
+	print(counter)
+	feature_sets = np.array(feature_sets)
+	labels = np.array(labels)
+
 
 if __name__ == "__main__":
     line_start = 0
@@ -125,3 +146,4 @@ if __name__ == "__main__":
     #For Testing Data
     initialize("test_source.csv", 0, -1, "test_initialized.csv")
     create_featuresets("test_initialized.csv", "lexicon-"+str(line_start)+"-"+str(line_end)+".pickle", "test_vector.csv")
+    create_test_data_pickle("test_vector.csv")
