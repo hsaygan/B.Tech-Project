@@ -1,5 +1,5 @@
 # B.Tech-Project: Sentimental Data Analysis 
-[![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-cpu)]
+![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-cpu)  
 All the updates and current work-in-progress for my B.Tech Project, along with [Namish Narayan](https://github.com/Namish123) under the guidance of Kshitiz Verma Sir.
 
 ## Current Work:
