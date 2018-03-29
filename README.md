@@ -1,15 +1,13 @@
-# B.Tech-Project
+# B.Tech-Project: Sentimental Data Analysis 
+[![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-cpu)]
 All the updates and current work-in-progress for my B.Tech Project, along with [Namish Narayan](https://github.com/Namish123) under the guidance of Kshitiz Verma Sir.
 
 ## Current Work:
-  * Sentiment Data Analysis
-    - Creating Featuresets from Abstract Data
-    - Feeding vectorized data into Neural Network
-    - Modifying parameters to improve accuracy
-    - Inputting large amount of data in the network
-    - For dynamic neural network model, pivoting to [PyTorch](http://pytorch.org/)
+  * Small Data Model for dataset of 10,662 lines of Data
+  * Large Data Model for dataset of 1.6 Million lines of Data
+  * Pivot to [PyTorch](http://pytorch.org/), for Dynamic Neural Network Model
 
-## Sentiment Data Analysis Overview:
+## Small Data Model Overview:
   * Creating Organized and Vectorized Data
     - Sentiment data is extracted from 2 txt file, pos.txt and neg.txt that contains respective type of sentences.
     - The program reads the files line by line, and lemmatizes the words for each line.
