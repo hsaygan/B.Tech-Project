@@ -1,4 +1,5 @@
 import csv
+import os
 import re
 import nltk
 from nltk.tokenize import word_tokenize
@@ -20,7 +21,7 @@ lemmatizer = WordNetLemmatizer()
 
 #Converts CSV file to format we desire
 def initialize(source_file, starting_line, ending_line, output_file):
-    with open(output_file, 'a') as output_obj:
+    with open(output_file, 'w+') as output_obj:
         output_writer = csv.writer(output_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
         with open(source_file, 'r', encoding='latin-1') as input_obj:
@@ -40,7 +41,7 @@ def initialize(source_file, starting_line, ending_line, output_file):
                 line = [polarity, tweet]
 
                 output_writer.writerow(line)
-                #print(line)
+                print(line)
 
 
 #Creates a dictionary of words appearing in [line_start, line_end] lines
@@ -114,6 +115,11 @@ def shuffle(source_file, output_file):
     data.to_csv(output_file, index=False)
 
 
+#Delete Temp Files
+def delete_file(path):
+    os.remove(path)
+
+
 #NOT DONE YET!
 def create_test_data_pickle(fin):
 	feature_sets = []
@@ -135,23 +141,29 @@ def create_test_data_pickle(fin):
 	labels = np.array(labels)
 
 
-if __name__ == "__main__":
-    Training_Data_Source = "../../Data/More/training.1600000.processed.noemoticon.csv"     #"Data/train_source.csv"
-    Testing_Data_Source = "../../Data/More/testdata.manual.2009.06.14.csv"                 #"Data/test_source.csv"
 
-    line_start = 0
+
+if __name__ == "__main__":
+    Training_Data_Source = "Data/train_source.csv"          # "../Data/More/training.1600000.processed.noemoticon.csv"
+    Testing_Data_Source = "Data/test_source.csv"            # "../Data/More/testdata.manual.2009.06.14.csv"
+
+    line_start = 0      #Length of Lexicon for [0,2501) is
     line_end = 2501
 
     #For Training Data
     initialize(Training_Data_Source, line_start, line_end, "Temp/train_initalized.csv")
     lexicon_count = create_lexicon("Temp/train_initalized.csv", line_start, line_end, "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle")
-    shuffle("Temp/train_initalized.csv", "Temp/train_shuffled.csv")
+    shuffle("Temp/train_initalized.csv", "Temp/train_data.csv")
 
     print ("\n\n\t Preprocessing for Training Data Completed!\n\n")
 
     #For Testing Data
     initialize(Testing_Data_Source, 0, -1, "Temp/test_initialized.csv")
-    create_featuresets("Temp/test_initialized.csv", "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle", "Temp/test_vector.csv")
+    create_featuresets("Temp/test_initialized.csv", "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle", "Temp/test_data.csv")
     #create_test_data_pickle("Data/test_vector.csv")
+
+    #Delete Temporary Files
+    delete_file("Temp/train_initalized.csv")
+    delete_file("Temp/test_initialized.csv")
 
     print ("\n\n\t Preprocessing for Training Data Completed!\n\n")
