@@ -1,4 +1,4 @@
-# B.Tech-Project: Sentimental Data Analysis 
+# B.Tech-Project: Sentimental Data Analysis
 All the updates and current work-in-progress for my B.Tech Project, along with [Namish Narayan](https://github.com/Namish123) under the guidance of Kshitiz Verma Sir.
 
 ## Current Work:
@@ -40,4 +40,4 @@ All the updates and current work-in-progress for my B.Tech Project, along with [
      python3 neural_net.py
 ```
 
-Please leave all our suggestions and updates in issues. Thank You.
+Please feel free to leave all suggestions and fixes in issues. Thank You.

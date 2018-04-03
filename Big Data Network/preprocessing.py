@@ -7,6 +7,7 @@ from nltk.stem import WordNetLemmatizer
 import pickle
 import numpy as np
 import pandas as pd
+import random
 
 lemmatizer = WordNetLemmatizer()
 
@@ -38,6 +39,7 @@ def initialize(source_file, starting_line, ending_line, output_file):
                     continue
 
                 tweet = re.sub(r'(\s)@\w+', r'\1',  " "+line[-1])
+                tweet = str(tweet)
                 line = [polarity, tweet]
 
                 output_writer.writerow(line)
@@ -114,6 +116,15 @@ def shuffle(source_file, output_file):
     print(data.head())
     data.to_csv(output_file, index=False)
 
+    fid = open(source_file, "r")
+    li = fid.readlines()
+    fid.close()
+
+    random.shuffle(li)
+    fid = open(output_file, "w")
+    fid.writelines(li)
+    fid.close()
+
 
 #Delete Temp Files
 def delete_file(path):
@@ -141,14 +152,12 @@ def create_test_data_pickle(fin):
 	labels = np.array(labels)
 
 
-
-
 if __name__ == "__main__":
-    Training_Data_Source = "Data/train_source.csv"          # "../Data/More/training.1600000.processed.noemoticon.csv"
-    Testing_Data_Source = "Data/test_source.csv"            # "../Data/More/testdata.manual.2009.06.14.csv"
+    Training_Data_Source = "../../Large Files/More/training.1600000.processed.noemoticon.csv"   # "Data/train_source.csv"
+    Testing_Data_Source = "../../Large Files/More/testdata.manual.2009.06.14.csv"               # "Data/test_source.csv"
 
     line_start = 0      #Length of Lexicon for [0,2501) is
-    line_end = 2501
+    line_end = 100
 
     #For Training Data
     initialize(Training_Data_Source, line_start, line_end, "Temp/train_initalized.csv")
@@ -163,7 +172,7 @@ if __name__ == "__main__":
     #create_test_data_pickle("Data/test_vector.csv")
 
     #Delete Temporary Files
-    delete_file("Temp/train_initalized.csv")
+    #delete_file("Temp/train_initalized.csv")
     delete_file("Temp/test_initialized.csv")
 
-    print ("\n\n\t Preprocessing for Training Data Completed!\n\n")
+    print ("\n\n\t Preprocessing for Testing Data Completed!\n\n")
