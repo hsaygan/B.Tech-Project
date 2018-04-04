@@ -4,18 +4,27 @@ import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from preprocessing import get_train_and_test_data
 import csv
 lemmatizer = WordNetLemmatizer()
 
-input_nodes = 6445
+Training_Data_Source = "../../Large Files/More/training.1600000.processed.noemoticon.csv"   # "Data/train_source.csv"
+Testing_Data_Source = "../../Large Files/More/testdata.manual.2009.06.14.csv"               # "Data/test_source.csv"
+
+input_nodes = 1083
 n_nodes_hl1 = 500
 n_nodes_hl2 = 200
-
 n_classes = 2
 
 batch_size = 32
 total_batches = int(1600000/batch_size)
 hm_epochs = 10
+
+line_start = 0
+line_end = line_start + batch_size
+
+test_data, train_data = get_train_and_test_data('../Data/pos.txt', '../Data/neg.txt')
+
 
 x = tf.placeholder('float')
 y = tf.placeholder('float')
@@ -60,9 +69,9 @@ def train_neural_network(x):
             if epoch != 1:
                 saver.restore(sess,"model.ckpt")
             epoch_loss = 1
-            with open('Temp/lexicon-0-2501.pickle','rb') as f:
+            with open('Temp/lexicon-0-200.pickle','rb') as f:
                 lexicon = pickle.load(f)
-            with open('Temp/train_shuffled.csv', buffering=20000, encoding='latin-1') as f:
+            with open('Temp/train_data.csv', buffering=20000, encoding='latin-1') as f:
                 reader = list(csv.reader(f))
                 batch_x = []
                 batch_y = []
@@ -71,7 +80,7 @@ def train_neural_network(x):
                     line = list(line)
                     label = line[0]
                     tweet = line[1]
-                    current_words = word_tokenize(tweet.lower())
+                    current_words = word_tokenize(tweet.lower().strip())
                     current_words = [lemmatizer.lemmatize(i) for i in current_words]
 
                     features = np.zeros(len(lexicon))
@@ -116,7 +125,7 @@ def test_neural_network():
         feature_sets = []
         labels = []
         counter = 0
-        with open('Temp/test_vector.csv', buffering=20000) as f:
+        with open('Temp/test_data.csv', buffering=20000) as f:
             for line in f:
                 try:
                     features = list(eval(line.split('::')[0]))

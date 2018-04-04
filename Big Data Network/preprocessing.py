@@ -43,7 +43,7 @@ def initialize(source_file, starting_line, ending_line, output_file):
                 line = [polarity, tweet]
 
                 output_writer.writerow(line)
-                print(line)
+                #print(line)
 
 
 #Creates a dictionary of words appearing in [line_start, line_end] lines
@@ -147,22 +147,23 @@ def create_test_data_pickle(fin):
 				counter += 1
 			except:
 				pass
+
 	print(counter)
 	feature_sets = np.array(feature_sets)
 	labels = np.array(labels)
 
 
-if __name__ == "__main__":
-    Training_Data_Source = "../../Large Files/More/training.1600000.processed.noemoticon.csv"   # "Data/train_source.csv"
-    Testing_Data_Source = "../../Large Files/More/testdata.manual.2009.06.14.csv"               # "Data/test_source.csv"
-
-    line_start = 0      #Length of Lexicon for [0,2501) is
-    line_end = 100
+#Main Function
+def get_train_and_test_data(Training_Data_Source, Testing_Data_Source, line_start, line_end):
+    if not os.path.exists(r"Temp"):
+        print("\nCreating New Folder 'Temp'...")
+        os.makedirs(r"Temp")
 
     #For Training Data
     initialize(Training_Data_Source, line_start, line_end, "Temp/train_initalized.csv")
-    lexicon_count = create_lexicon("Temp/train_initalized.csv", line_start, line_end, "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle")
+    create_lexicon("Temp/train_initalized.csv", line_start, line_end, "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle")
     shuffle("Temp/train_initalized.csv", "Temp/train_data.csv")
+    create_featuresets("Temp/train_data.csv", "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle", "Temp/train_vector.csv")
 
     print ("\n\n\t Preprocessing for Training Data Completed!\n\n")
 
@@ -171,8 +172,26 @@ if __name__ == "__main__":
     create_featuresets("Temp/test_initialized.csv", "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle", "Temp/test_data.csv")
     #create_test_data_pickle("Data/test_vector.csv")
 
+    print ("\n\n\t Preprocessing for Testing Data Completed!\n\n")
+
     #Delete Temporary Files
-    #delete_file("Temp/train_initalized.csv")
+    delete_file("Temp/train_initalized.csv")
     delete_file("Temp/test_initialized.csv")
 
-    print ("\n\n\t Preprocessing for Testing Data Completed!\n\n")
+    print ("\n\n\t Temporary Files are Deleted!\n\n")
+
+
+if __name__ == "__main__":
+    Training_Data_Source = "../../Large Files/More/training.1600000.processed.noemoticon.csv"   # "Data/train_source.csv"
+    Testing_Data_Source = "../../Large Files/More/testdata.manual.2009.06.14.csv"               # "Data/test_source.csv"
+    line_start = 0
+    line_end = 200
+
+    #get_train_and_test_data(Training_Data_Source, Testing_Data_Source, line_start, line_end)
+    initialize(Training_Data_Source, line_start, line_end, "Temp/train_initalized.csv")
+    create_lexicon("Temp/train_initalized.csv", line_start, line_end, "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle")
+
+#Length of Lexicon for [0, 200) is 1083
+#Length of Lexicon for [0, 2501) is
+
+#180 lines for lexicon per minute, 1.6 Million Lines: 148.14 hours to form the complete lexicon

@@ -1,4 +1,5 @@
 import tensorflow as tf
+import os
 import numpy as np
 from create_sentiment_featuresets import create_feature_sets_and_labels
 
@@ -65,4 +66,22 @@ def train_neural_network(x):
             accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
             print('Accuracy:',accuracy.eval({x:test_x, y:test_y}))
 
+def get_files():
+    with open("train_x.txt", "w+") as f:
+        for item in train_x:
+            f.write("%s\n" % item)
+
+    with open("train_y.txt", "w+") as f:
+        for item in train_y:
+            f.write("%s\n" % item)
+
+    with open("test_x.txt", "w+") as f:
+        for item in test_x:
+            f.write("%s\n" % item)
+
+    with open("test_y.txt", "w+") as f:
+        for item in test_y:
+            f.write("%s\n" % item)
+
+get_files()
 train_neural_network(x)
