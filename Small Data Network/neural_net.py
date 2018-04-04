@@ -1,9 +1,14 @@
 import tensorflow as tf
+import pickle
 import os
 import numpy as np
 from create_sentiment_featuresets import create_feature_sets_and_labels
 
-train_x, train_y, test_x, test_y = create_feature_sets_and_labels('../Data/pos.txt', '../Data/neg.txt')
+with open("Data/sentiment_set.pickle",'rb') as f:
+    train_x, train_y, test_x, test_y = pickle.load(f)
+#train_x, train_y, test_x, test_y = create_feature_sets_and_labels('../Data/pos.txt', '../Data/neg.txt')
+
+print (test_y)
 
 n_nodes_hl1 = 350
 n_nodes_hl2 = 100
@@ -42,29 +47,27 @@ def train_neural_network(x):
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y))
     optimizer = tf.train.AdamOptimizer().minimize(cost)
 
-    with open("loss_file.txt", 'w+') as lossf:
-        with tf.Session() as sess:
-            sess.run(tf.global_variables_initializer())
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
 
-            for epoch in range(hm_epochs):
-                epoch_loss = 0
-                i=0
-                while i < len(train_x):
-                    start = i
-                    end = i + batch_size
-                    batch_x = np.array(train_x[start:end])
-                    batch_y = np.array(train_y[start:end])
-                    _, c = sess.run([optimizer, cost], feed_dict={x: batch_x, y: batch_y})
-                    epoch_loss += c
+        for epoch in range(hm_epochs):
+            epoch_loss = 0
+            i=0
+            while i < len(train_x):
+                start = i
+                end = i + batch_size
+                batch_x = np.array(train_x[start:end])
+                batch_y = np.array(train_y[start:end])
+                _, c = sess.run([optimizer, cost], feed_dict={x: batch_x, y: batch_y})
+                epoch_loss += c
 
-                    i += batch_size
+                i += batch_size
 
-                lossf.write("(" + str(epoch+1) + "," + str(epoch_loss) + ")")
-                print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
+            print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
 
-            correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
-            accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
-            print('Accuracy:',accuracy.eval({x:test_x, y:test_y}))
+        correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
+        accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+        print('Accuracy:',accuracy.eval({x:test_x, y:test_y}))
 
 def get_files():
     with open("train_x.txt", "w+") as f:
