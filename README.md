@@ -2,8 +2,8 @@
 All the updates and current work-in-progress for my B.Tech Project, along with [Namish Narayan](https://github.com/Namish123) under the guidance of Kshitiz Verma Sir.
 
 ## Current Work:
-  * Small Data Model for dataset of 10,662 lines of Data ![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-cpu)  
-  * Large Data Model for dataset of 1.6 Million lines of Data ![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-cpu)  
+  * Small Data Model for dataset of 10,662 lines of Data ![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-cpu)
+  * Large Data Model for dataset of 1.6 Million lines of Data ![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-cpu)
   * Pivot to [PyTorch](http://pytorch.org/), for Dynamic Neural Network Model ![Build Status](https://ci.tensorflow.org/buildStatus/icon?job=tensorflow-master-win-cmake-py)
 
 ## Small Data Model Overview:
