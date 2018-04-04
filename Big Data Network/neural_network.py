@@ -4,30 +4,29 @@ import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-from preprocessing import get_train_and_test_data, initialize, create_lexicon
+from preprocessing import get_train_data, get_test_data, initialize, create_standard_lexicon
 import csv
 lemmatizer = WordNetLemmatizer()
 
 Training_Data_Source = "../../Large Files/More/training.1600000.processed.noemoticon.csv"   # "Data/train_source.csv"
 Testing_Data_Source = "../../Large Files/More/testdata.manual.2009.06.14.csv"               # "Data/test_source.csv"
+standard_pickle = "Temp/lexicon-0-2001.pickle"
 
-input_nodes = 675
-n_nodes_hl1 = 500
+input_nodes = 5499
+n_nodes_hl1 = 1300
 n_nodes_hl2 = 200
 n_classes = 2
 
 batch_size = 100
-total_batches = int(1600000/batch_size)
-hm_epochs = 10
+total_batches = int(2001/batch_size)
+hm_epochs = 1
 
-line_start = 0
-line_end = 2001
-
-# with open("Temp/feature_set_and_labels-0-101.pickle",'rb') as f:
+#Loading Data from a Pickle
+# with open(standard_pickle,'rb') as f:
 #     train_x, train_y, test_x, test_y = pickle.load(f)
 
-create_custom_lexicon(Training_Data_Source, line_start, line_end, "Temp/train_initalized.csv", "Temp/lexicon-"+str(line_start)+"-"+str(line_end)+".pickle")
-train_x, train_y, test_x, test_y = get_train_and_test_data(Training_Data_Source, Testing_Data_Source, line_start, line_end)
+#Creating Dictionary
+#create_standard_lexicon(Training_Data_Source, line_start, line_end, "Temp/train_initalized.csv", standard_pickle)
 
 x = tf.placeholder('float')
 y = tf.placeholder('float')
@@ -64,21 +63,38 @@ def train_neural_network(x):
         sess.run(tf.global_variables_initializer())
         for epoch in range(hm_epochs):
             epoch_loss = 0
-            i=0
-            while i < len(train_x):
-                start = i
-                end = i + batch_size
-                batch_x = np.array(train_x[start:end])
-                batch_y = np.array(train_y[start:end])
-                _, c = sess.run([optimizer, cost], feed_dict={x: batch_x, y: batch_y})
-                epoch_loss += c
+            slot_count = 0
 
-                i += batch_size
-            saver.save(sess, "model.ckpt")
+            line_start = 0
+            line_end = 0
+            while True:
+                print ("\n=======================================================================")
+                line_start = line_end
+                line_end = line_start + 2*batch_size
+                print ("\nSlot: " + str(slot_count+1) + "\t\t(Lines: "+ str(line_start) + "-" + str(line_end) + ")")
+                train_x, train_y = get_train_data(Training_Data_Source, Testing_Data_Source, line_start, line_end)
+                slot_count += 1
+                i = 0
 
+                while i < len(train_x):
+                    start = i
+                    end = i + batch_size
+                    print("\n\tBatch: ", start, " - ", end)
+                    batch_x = np.array(train_x[start:end])
+                    batch_y = np.array(train_y[start:end])
+                    _, c = sess.run([optimizer, cost], feed_dict={x: batch_x, y: batch_y})
+                    epoch_loss += c
+                    i += batch_size
+
+
+                if slot_count >= total_batches:
+                  break
+
+            #saver.save(sess, "model.ckpt")
             print('Epoch', epoch+1, 'completed out of',hm_epochs,'loss:',epoch_loss)
 
-        saver.restore(sess,"model.ckpt")
+        #saver.restore(sess,"model.ckpt")
+        test_x, test_y = get_test_data(Training_Data_Source, Testing_Data_Source, line_start, line_end)
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
         print('Accuracy:',accuracy.eval({x:test_x, y:test_y}))
