@@ -19,7 +19,7 @@ n_classes = 2
 
 batch_size = 100
 total_batches = int(2001/batch_size)
-hm_epochs = 1
+hm_epochs = 10
 
 #Loading Data from a Pickle
 # with open(standard_pickle,'rb') as f:
@@ -58,6 +58,8 @@ def train_neural_network(x):
     prediction = neural_network_model(x)
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=prediction, labels=y))
     optimizer = tf.train.AdamOptimizer().minimize(cost)
+    # RMS prop
+    # Momentum
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())

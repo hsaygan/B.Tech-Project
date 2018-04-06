@@ -42,6 +42,7 @@ def create_lexicon(pos,neg):            #Creating array for all the words found 
             lexicon2.append(word)
 
     print("Length of Lexicon (entire dataset): ", len(lexicon2))
+    print ("\nLexicon: \n", lexicon2)
     return lexicon2
 
 def sample_handling(sample, lexicon, classification):
@@ -58,7 +59,7 @@ def sample_handling(sample, lexicon, classification):
         for line in contents[:hm_lines]:
             current_words = word_tokenize(line.lower())
             current_words = [lemmatizer.lemmatize(i) for i in current_words]
-            features = np.zeros(len(lexicon))
+            features = np.zeros(len(lexicon), dtype=int)
             for word in current_words:
                 if word.lower() in lexicon:
                     index_value = lexicon.index(word.lower())

@@ -4,9 +4,9 @@ import os
 import numpy as np
 from create_sentiment_featuresets import create_feature_sets_and_labels
 
-with open("Data/sentiment_set.pickle",'rb') as f:
-    train_x, train_y, test_x, test_y = pickle.load(f)
-#train_x, train_y, test_x, test_y = create_feature_sets_and_labels('../Data/pos.txt', '../Data/neg.txt')
+#with open("Data/sentiment_set.pickle",'rb') as f:
+#    train_x, train_y, test_x, test_y = pickle.load(f)
+train_x, train_y, test_x, test_y = create_feature_sets_and_labels('../Data/pos.txt', '../Data/neg.txt')
 
 print (test_y)
 
