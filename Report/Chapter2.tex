@@ -17,8 +17,10 @@ To start off our attempt at implementation, we used a small openly available pos
 "enigma is well-made , but it's just too dry and too placid"\\
 "it's tough to be startled when you're almost dozing"\\
 \hline
-\end{tabular}\newline
-\caption{Extracts (per line) for Negative Sentiment Dataset}
+\end{tabular}
+\end{center}
+\begin{center}
+\textsubscript{Extracts (per line) for Negative Sentiment Dataset}
 \end{center}
 
 \begin{center}
@@ -32,7 +34,9 @@ To start off our attempt at implementation, we used a small openly available pos
 "a solidly entertaining little film"\\
 \hline
 \end{tabular}\newline
-\caption{Extracts (per line) for Positive Sentiment Dataset}
+\end{center}
+\begin{center}
+\textsubscript{Extracts (per line) for Positive Sentiment Dataset}
 \end{center}
 
 
@@ -73,7 +77,8 @@ Therefore, the vector now transforms into a 2 dimentional aspect, one containing
 \begin{verbatim}
 Let a vector be:
     vec = [1, 0, 1, 0]
-Now let's say that it was in the positive.txt file, therefore it will be labbeled as [1,0]
+Now let's say that it was in the positive.txt file, 
+therefore it will be labbeled as [1,0]
     final_vec = [[1,0,1,0], [1,0]]
 \end{verbatim}
 
@@ -99,6 +104,9 @@ We used Neural Networks due to it's expandability and flexibility regarding fitt
 In this fully connected Neural Network, each node is connected to all the nodes in the layer before and after it's own layer. The diagram makes it easier to visualize. Each connection between 2 nodes has a weight and a bias value associated with it, which is initialized to random numbers. We also used Rectified Linear (or ReLu) as an activation function for each connection. 
 
 \includegraphics[scale=0.4]{Figures/nn_model.jpg}
+\begin{center}
+\textsubscript{Source: https://www.researchgate.net/figure/Structure-of-the-Artificial-Neural-Network-model_fig2_305432476}
+\end{center}
 
 \subsection{Feed-forward and Back-propagation}
 After the Neural Network Model is built, we set it up to train it with our data. We used Softmax Cross Entropy with Logits, to reduce cost and AdamOptimizer instead of classical stochastic gradient which is a combination of Adaptive Gradient Algorithm(AdaGrad) and Root Mean Square Propagation (RMSProp), and a standard in TensorFlow. We Then trained the Model in Batches of 100 lines per batch. Do Note that TensorFlow is a library which handles back propogation all by itself with the provided model in a given session. Thus, the labour intensive part was handled by the library itself.
@@ -158,6 +166,7 @@ test_y (Testing Label):
 \subsection{Cost Reduction}
 The whole point of Neural Network (or Gradient Descent) is to minimize the Cost function efficiently. Here we see the Neural Network Model's improved cost after each individual epoch. The figure resembling a hyperbola suggests a good backpropagation and reasonably efficient Neural Network Model.
 
+\begin{center}
 \begin{tikzpicture}
 \begin{axis}[
     title={Cost per Epoch},
@@ -184,6 +193,7 @@ The whole point of Neural Network (or Gradient Descent) is to minimize the Cost 
     \legend{Cost}
 \end{axis}
 \end{tikzpicture}
+\end{center}
 
 
 \subsection{Varying Epochs}
@@ -199,7 +209,8 @@ Number of Hidden Nodes & 400, 200\\
 \end{tabular}
 \end{center}
 
-\begin{tikzpicture}
+\begin{center}
+\begin{tikzpicture}[!h]
 \begin{axis}[
     ymin=0.5, ymax=0.6, ylabel=Accuracy, xlabel=Number of Epochs, minor y tick num = 3, area style, xmin=10, xmax=60,
     x tick label style={/pgf/number format/1000 sep=},
@@ -208,8 +219,7 @@ Number of Hidden Nodes & 400, 200\\
 \addplot+[ybar interval,mark=no] plot coordinates { (10, 0.5825516) (20, 0.5844278) (30, 0.5806754) (40, 0.5778612) (50, 0.5938086) (60,0)};
 \end{axis}
 \end{tikzpicture}
-
-%\includegraphics[scale=0.3]{epoch.png}
+\end{center}
 
 \subsection{Varying Hidden Layer Nodes}
 Number of hidden layer builds up complexity of the Neural Network Model. More the number of hidden layer's nodes, the more inter-node connections are required, ie. more Weights and Biases. This elevation in complexity shall help in complex sentence's determination of sentiments, but requires more computation in creating the model.
@@ -224,18 +234,19 @@ Number of Hidden Nodes & Variable\\
 \end{tabular}
 \end{center}
 
-\begin{tikzpicture}
+\begin{center}
+\begin{tikzpicture}[!h]
 \begin{axis}[
-    scale=0.9, ymin=0.5, ymax=0.6, ylabel=Accuracy, xlabel=Number of Hidden Nodes, minor y tick num = 3, area style, width=\textwidth,
+    scale=0.6, ymin=0.5, ymax=0.6, ylabel=Accuracy, xlabel=Number of Hidden Nodes, minor y tick num = 3, area style, width=\textwidth,
 	enlargelimits=0.05,	ybar interval=0.7,
 	xticklabel style={text height=1.5ex},
-	symbolic x coords={500-400-300,500-300-200,400-200-100,300-300-100, 100-100-100, 50-40-20}
+	symbolic x coords={500-400-300, 500-300-200, 400-200-100,300-300-100, 100-100-100, 50-40-20}
     ]
 \addplot+[ybar interval,mark=no] plot coordinates { (500-400-300, 0.5947467) (500-300-200, 0.5919325) (400-200-100, 0.5609756) (300-300-100, 0.54409003) (100-100-100, 0.5553471) (50-40-20, 0.54971856)};
 \end{axis}
 \end{tikzpicture}
+\end{center}
 
-%\includegraphics[scale=0.3]{hlnodes.png}
 
 \subsection{Varying Number of Hidden Layers}
 Similar to varying the number of hidden nodes, adding more hidden layers contribute significantly in making the model more complex. However it is evident from the resulting graph that more layers results in less accuracy, since more time will be needed to train the extra variables induced due to variable hidden layers.
@@ -250,6 +261,7 @@ Number of Hidden Nodes & 500, 300, 200\\
 \end{tabular}
 \end{center}
 
+\begin{center}
 \begin{tikzpicture}
 \begin{axis}[
     ymin=0.5, ymax=0.6, ylabel=Accuracy, xlabel=Number of Hidden Layers, minor y tick num = 3, area style,
@@ -259,9 +271,7 @@ Number of Hidden Nodes & 500, 300, 200\\
 \addplot+[ybar interval,mark=no] plot coordinates { (1, 0.60318947) (2, 0.5928518) (3, 0.5619325) (4,0)};
 \end{axis}
 \end{tikzpicture}
-
-
-%\includegraphics[scale=0.3]{nhiddenlayers.png}
+\end{center}
 
 \section{Conclusion}
 From the above results we can conclude that the effect of either of the parameters is not that significant, as it's in the margin of error of the random value of the weights and biases in the initialization process since the Standard Deviation of the random tensor is 1.0. 
@@ -280,3 +290,4 @@ tf.random_normal
 
 Along with this, we can conclude that most of the deviations of accuracy, which was withing +-5, is not note-worthy.\newline
 Since Neural Network's heart lies in it's data, we strive to get more data to train our Neural Network. In the next chapter, we move from data  of just 5331 lines of unstructured Natural Language, to 1.6 Million lines of unstructured labelled Data from Tweets.
+
