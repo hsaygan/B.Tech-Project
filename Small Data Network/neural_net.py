@@ -107,8 +107,6 @@ def use_neural_network(input_data):
         features = np.array(list(features))
 
         #print ("\n FEATURES : \n\tShape = ", features.shape, "\n\tValues = ", features, "\n\n")
-        # pos: [1,0] , argmax: 0
-        # neg: [0,1] , argmax: 1
         result = (sess.run(tf.argmax(prediction.eval(feed_dict={x:[features]}),1)))
         if result[0] == 0:
             print('\tPositive:',input_data)
@@ -133,7 +131,7 @@ def get_files():
             f.write("%s\n" % item)
 
 train_neural_network(x)
-#use_neural_network("That's a silly criticism")          #Negative
-#use_neural_network("DiCaprio has an amazing charm")     #Positive
-#use_neural_network("I'm not Happy")                     #Not Obvious
+use_neural_network("That's a silly criticism")          #Negative
+use_neural_network("DiCaprio has an amazing charm")     #Positive
+use_neural_network("I'm not Happy")                     #Not Obvious
 #get_files()

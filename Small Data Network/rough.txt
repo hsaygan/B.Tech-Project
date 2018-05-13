@@ -1,0 +1,182 @@
+hsaygan@Blade:~/Downloads/Projects/BTP Project/B.Tech-Project/Small Data Network$ python3 neural_net.py
+
+
+================ Creating Lexicon
+
+
+================ Creating FeatureSets
+
+
+================ Compiling and Saving all FeatureSets
+
+
+================ Creating Neural Network Model
+
+
+================ Training Neural Network
+2018-05-13 20:51:38.513520: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+
+	Saving session to model.ckpt ...
+
+Epoch 1 completed out of 25  | Loss: 7759.525341033936
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 2 completed out of 25  | Loss: 4498.784164428711
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 3 completed out of 25  | Loss: 3216.098922729492
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 4 completed out of 25  | Loss: 2476.564739227295
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 5 completed out of 25  | Loss: 1971.0659828186035
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 6 completed out of 25  | Loss: 1594.4458689689636
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 7 completed out of 25  | Loss: 1303.7113780975342
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 8 completed out of 25  | Loss: 1073.659665107727
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 9 completed out of 25  | Loss: 898.0232169628143
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 10 completed out of 25  | Loss: 753.9869775772095
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 11 completed out of 25  | Loss: 618.6490194797516
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 12 completed out of 25  | Loss: 526.5515871047974
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 13 completed out of 25  | Loss: 445.5990301370621
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 14 completed out of 25  | Loss: 351.4607073664665
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 15 completed out of 25  | Loss: 278.16354662179947
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 16 completed out of 25  | Loss: 230.63872933387756
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 17 completed out of 25  | Loss: 206.79773035645485
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 18 completed out of 25  | Loss: 183.75007046759129
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 19 completed out of 25  | Loss: 169.8522485345602
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 20 completed out of 25  | Loss: 125.82371151447296
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 21 completed out of 25  | Loss: 104.11081252247095
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 22 completed out of 25  | Loss: 89.43105869740248
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 23 completed out of 25  | Loss: 85.19442090764642
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 24 completed out of 25  | Loss: 90.1411682292819
+
+	Loading session from model.ckpt ...
+
+	Saving session to model.ckpt ...
+
+Epoch 25 completed out of 25  | Loss: 112.9553629308939
+
+Accuracy: 0.58630395
+
+
+================ Testing Neural Network Model
+WARNING:tensorflow:From /home/hsaygan/.local/lib/python3.6/site-packages/tensorflow/python/util/tf_should_use.py:118: initialize_all_variables (from tensorflow.python.ops.variables) is deprecated and will be removed after 2017-03-02.
+Instructions for updating:
+Use `tf.global_variables_initializer` instead.
+	Negative: That's a silly criticism
+
+
+================ Testing Neural Network Model
+	Positive: DiCaprio has an amazing charm
+
+
+================ Testing Neural Network Model
+	Negative: I'm not Happy
