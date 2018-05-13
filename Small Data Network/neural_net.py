@@ -131,6 +131,7 @@ def get_files():
             f.write("%s\n" % item)
 
 train_neural_network(x)
+
 use_neural_network("That's a silly criticism")          #Negative
 use_neural_network("DiCaprio has an amazing charm")     #Positive
 use_neural_network("I'm not Happy")                     #Not Obvious
