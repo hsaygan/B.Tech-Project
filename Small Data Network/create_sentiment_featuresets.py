@@ -16,14 +16,12 @@ def create_lexicon(pos,neg):            #Creating array for all the words found 
         with open(current_file, "r") as f:
             contents = f.readlines()
 
-            #Random Print
             line = contents[0]
             all_words_in_line = word_tokenize(line.lower())
             all_words_in_line = list(all_words_in_line)
             lehicon = [lemmatizer.lemmatize(i) for i in all_words_in_line]
             w_counters = Counter(lehicon)
-            print("\n\tLine (1 line of the ",current_file," dataset): \n", line, "\tall_words_in_line (extrating words from lines): \n", all_words_in_line, "\n\tlexicon (Lemmatized, ie. only one form of a word): \n", lehicon, "\n\tw_counters (counts the total occurence of lexicon words):\n", w_counters,  "\n\n")
-            #Random Print
+            #print("\nLine (1 line of the ",current_file," dataset): \n", line, "All words in the Line: \n", all_words_in_line, "\nLexicon: \n", lehicon, "\nOccurences: \n", w_counters,  "\n\n")
 
             for line in contents[:hm_lines]:
                 all_words = word_tokenize(line.lower())
@@ -41,8 +39,12 @@ def create_lexicon(pos,neg):            #Creating array for all the words found 
         if 1000 > w_counts[word] > 50:
             lexicon2.append(word)
 
-    print("Length of Lexicon (entire dataset): ", len(lexicon2))
-    print ("\nLexicon: \n", lexicon2)
+    #print("\n\tLength of Lexicon (entire dataset): ", len(lexicon2))
+    #print ("\nLexicon: \n", lexicon2)
+
+    with open('./temp/lexicon.pickle','wb') as f:
+        pickle.dump(lexicon2,f)
+
     return lexicon2
 
 def sample_handling(sample, lexicon, classification):
@@ -68,23 +70,26 @@ def sample_handling(sample, lexicon, classification):
             features = list(features)
             featureset.append([features, classification])
 
-    #Random Print
-    print ("\n\nFeature Set[0] for ", sample, " (This is a vector which represents lexicon words occurences, along with their sentiment): \n", featureset[0])
-    #Random Print
+    #print ("\n\nFeature Set[0] for", sample, ": \n", featureset[0])
 
     return featureset
 
 def create_feature_sets_and_labels(pos, neg, test_size=0.1):
+    print ("\n\n================ Creating Lexicon")
     lexicon = create_lexicon(pos, neg)
-    features = []
-    features += sample_handling(pos, lexicon, [1,0])
+
+    print ("\n\n================ Creating FeatureSets")
+    features = sample_handling(pos, lexicon, [1,0])
     features += sample_handling(neg, lexicon, [0,1])
+
+    print ("\n\n================ Compiling and Saving all FeatureSets")
     random.shuffle(features)
         #Final Question : does tf.argmax([output]) == tf.argmax([expectations])
         #with shuffle : tf.argmax([52351,11293]) == tf.argmax([1,0])
         #without      : tf.argmax([9999999999,-999999999]) == tf.argmax([1,0])
         #since it first goes all in for positive and then for negative.
     features = np.array(features)
+
     testing_size = int(test_size*len(features))
         #train_x = list(features[:,0])
         #[[5,8], [7,9]]
@@ -96,10 +101,7 @@ def create_feature_sets_and_labels(pos, neg, test_size=0.1):
     test_x = list(features[:,0][-testing_size:])
     test_y = list(features[:,1][-testing_size:])
 
-    #Random Print
-    print ("\nAfter That, we shuffle adjust +ve and -ve datasets, and separate the O-H-A as train_y, and array as train_x.\n\n\ntrain_x[5]:\n", train_x[5], "\n\ntrain_y[5]:\n", train_y[0])
-    #Random Print
-
+    #print ("\nAfter That, we shuffle adjust +ve and -ve datasets, and separate the O-H-A as train_y, and array as train_x.\n\n\ntrain_x[5]:\n", train_x[5], "\n\ntrain_y[5]:\n", train_y[0])
     return train_x, train_y, test_x, test_y
 
 if __name__ == "__main__":
@@ -108,8 +110,5 @@ if __name__ == "__main__":
         os.makedirs(r"Data")
     train_x, train_y, test_x, test_y = create_feature_sets_and_labels('../Data/pos.txt', '../Data/neg.txt')
 
-
     with open('Data/sentiment_set.pickle', 'wb') as f:
         pickle.dump([train_x, train_y, test_x, test_y], f)
-
-create_feature_sets_and_labels
