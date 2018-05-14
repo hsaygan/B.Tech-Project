@@ -17,7 +17,7 @@ All the updates and current work-in-progress for my B.Tech Project, along with [
 
   * Data Feed into Neural Network
 <p align="center">
-<img src="https://i.imgur.com/wMjbY4X.png">
+<img src="https://i.imgur.com/e6DKjs7.png">
 </p>
     - This calculates the total accuracy of the model.
 
