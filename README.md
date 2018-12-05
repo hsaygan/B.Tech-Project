@@ -4,7 +4,6 @@ All the updates and current work-in-progress for my B.Tech Project, along with [
 ## Current Work:
   * Small Data Model for dataset of 10,662 lines of Data
   * Large Data Model for dataset of 1.6 Million lines of Data
-  * Pivot to [PyTorch](http://pytorch.org/), for Dynamic Neural Network Model
 
 ## Small Data Model Overview:
   * Creating Organized and Vectorized Data
